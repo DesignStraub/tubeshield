@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>TubeShield</title>
+  <style>
+    :root { color-scheme: light dark; --bg: #ffffff; --fg: #1d1d1f; --muted: #6e6e73; --line: #e5e5ea; --accent: #0a84ff; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #1e1e1e; --fg: #f5f5f7; --muted: #98989d; --line: #3a3a3c; } }
+    body { margin: 0; width: 280px; background: var(--bg); color: var(--fg); font: 13px -apple-system, system-ui, sans-serif; }
+    header { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
+    h1 { margin: 0; font-size: 15px; }
+    header p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    label { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); cursor: pointer; }
+    label small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+    input { width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+    footer { padding: 10px 16px 12px; color: var(--muted); font-size: 11px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TubeShield</h1>
+    <p>Adblocker &amp; YouTube ohne Auto-Pause</p>
+  </header>
+  <label>
+    <span>Werbung blockieren<small>Werbe-Netzwerke, Tracker &amp; YouTube-Werbung</small></span>
+    <input type="checkbox" id="adblock">
+  </label>
+  <label>
+    <span>Auto-Pause verhindern<small>„Weiterschauen?“-Dialog automatisch bestätigen</small></span>
+    <input type="checkbox" id="noAutoPause">
+  </label>
+  <footer id="status">Änderungen gelten sofort.</footer>
+  <script src="popup.js"></script>
+</body>
+</html>

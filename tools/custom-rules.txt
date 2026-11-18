@@ -1,0 +1,53 @@
+! TubeShield – eigene Regeln (Adblock-Plus-Syntax, nur einfache Domain-Regeln)
+! Werden beim Erzeugen von extension/rules/ads.json vor die Filterlisten gesetzt.
+
+! --- YouTube-Werbe-Endpunkte ---
+||youtube.com/pagead/
+||youtube.com/api/stats/ads
+||youtube.com/get_midroll_info
+
+! --- Große Werbenetzwerke (falls eine Liste sie mal nicht enthält) ---
+||doubleclick.net^
+||googlesyndication.com^
+||googleadservices.com^
+||googletagservices.com^
+||adservice.google.com^
+||google-analytics.com^
+||adnxs.com^
+||adsrvr.org^
+||amazon-adsystem.com^
+||criteo.com^
+||criteo.net^
+||taboola.com^
+||outbrain.com^
+||pubmatic.com^
+||rubiconproject.com^
+||openx.net^
+||casalemedia.com^
+||moatads.com^
+||scorecardresearch.com^
+||quantserve.com^
+||adform.net^
+||smartadserver.com^
+||yieldlab.net^
+||teads.tv^
+||33across.com^
+||sharethrough.com^
+||bidswitch.net^
+||indexww.com^
+||lijit.com^
+||advertising.com^
+||mgid.com^
+||revcontent.com^
+||zemanta.com^
+||adsafeprotected.com^
+||doubleverify.com^
+||serving-sys.com^
+||flashtalking.com^
+||popads.net^
+||propellerads.com^
+||exoclick.com^
+||ads-twitter.com^
+||ads.linkedin.com^
+||adition.com^
+||yieldlove.com^

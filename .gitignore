@@ -1,0 +1,16 @@
+# Build-Ausgabe
+xcode/TubeShield/build/
+DerivedData/
+
+# Wird von scripts/build.sh aus extension/ erzeugt
+xcode/TubeShield/TubeShield Extension/Resources/
+
+# Persönliche Xcode-Daten
+xcuserdata/
+*.xcuserstate
+
+# Deine Apple-Team-ID (siehe README)
+.team
+
+# macOS
+.DS_Store

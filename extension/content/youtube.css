@@ -1,0 +1,54 @@
+/* Nur aktiv, wenn das Content-Script html[data-tubeshield-ads] setzt (Ad-Blocking an). */
+html[data-tubeshield-ads] #masthead-ad,
+html[data-tubeshield-ads] #player-ads,
+html[data-tubeshield-ads] ytd-ad-slot-renderer,
+html[data-tubeshield-ads] ytd-in-feed-ad-layout-renderer,
+html[data-tubeshield-ads] ytd-display-ad-renderer,
+html[data-tubeshield-ads] ytd-banner-promo-renderer,
+html[data-tubeshield-ads] ytd-statement-banner-renderer,
+html[data-tubeshield-ads] ytd-promoted-sparkles-web-renderer,
+html[data-tubeshield-ads] ytd-promoted-video-renderer,
+html[data-tubeshield-ads] ytd-companion-slot-renderer,
+html[data-tubeshield-ads] ytd-action-companion-ad-renderer,
+html[data-tubeshield-ads] ytd-player-legacy-desktop-watch-ads-renderer,
+html[data-tubeshield-ads] ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-ads"],
+html[data-tubeshield-ads] ytd-rich-item-renderer:has(ytd-ad-slot-renderer),
+html[data-tubeshield-ads] ytd-rich-section-renderer:has(ytd-statement-banner-renderer),
+html[data-tubeshield-ads] ytd-reel-video-renderer:has(ytd-ad-slot-renderer),
+html[data-tubeshield-ads] ytd-mealbar-promo-renderer,
+html[data-tubeshield-ads] yt-mealbar-promo-renderer,
+html[data-tubeshield-ads] tp-yt-paper-dialog:has(yt-upsell-dialog-renderer),
+html[data-tubeshield-ads] tp-yt-paper-dialog:has(yt-mealbar-promo-renderer),
+html[data-tubeshield-ads] ytd-brand-video-singleton-renderer,
+html[data-tubeshield-ads] ytd-brand-video-shelf-renderer,
+html[data-tubeshield-ads] .ytp-ad-overlay-container,
+html[data-tubeshield-ads] .ytp-ad-overlay-slot,
+html[data-tubeshield-ads] ytm-promoted-sparkles-web-renderer,
+html[data-tubeshield-ads] ytm-companion-ad-renderer,
+html[data-tubeshield-ads] ad-slot-renderer {
+  display: none !important;
+}
+
+/* Abdunklung hinter einem offenen Premium-Dialog entfernen */
+html[data-tubeshield-ads]:has(tp-yt-paper-dialog:not([aria-hidden="true"]) :is(yt-upsell-dialog-renderer, yt-mealbar-promo-renderer)) tp-yt-iron-overlay-backdrop {
+  display: none !important;
+}
+
+/* Während eine Werbung läuft, den Spot unsichtbar machen
+   (er läuft stumm im Hintergrund durch bzw. wird übersprungen). */
+html[data-tubeshield-ads] #movie_player.ad-showing .html5-video-container,
+html[data-tubeshield-ads] #movie_player.ad-showing .video-ads,
+html[data-tubeshield-ads] #movie_player.ad-showing .ytp-chrome-bottom,
+html[data-tubeshield-ads] #movie_player.ad-showing .ytp-chrome-top,
+html[data-tubeshield-ads] #movie_player.ad-showing .ytp-gradient-bottom,
+html[data-tubeshield-ads] #movie_player.ad-showing .ytp-gradient-top {
+  opacity: 0 !important;
+  transition: none !important;
+}
+
+/* Gelbe Werbe-Leisten: dünner Werbe-Fortschrittsbalken und die gelben
+   Markierungen für Werbepausen in der normalen Zeitleiste. */
+html[data-tubeshield-ads] .ytp-ad-persistent-progress-bar-container,
+html[data-tubeshield-ads] .ytp-ad-progress-list {
+  display: none !important;
+}
