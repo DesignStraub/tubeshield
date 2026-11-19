@@ -81,7 +81,7 @@ html[lang^="de"][data-tubeshield-nohome] ytd-browse[page-subtype="home"] ytd-ric
 
 /* ---------- Shorts ausblenden (html[data-tubeshield-noshorts]) ---------- */
 html[data-tubeshield-noshorts] ytd-guide-entry-renderer:has(a[title="Shorts"]),
-html[data-tubeshield-noshorts] ytd-mini-guide-entry-renderer[aria-label="Shorts"],
+html[data-tubeshield-noshorts] ytd-mini-guide-entry-renderer:has(a[title="Shorts"]),
 html[data-tubeshield-noshorts] ytd-rich-shelf-renderer[is-shorts],
 html[data-tubeshield-noshorts] ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
 html[data-tubeshield-noshorts] ytd-rich-section-renderer:has(ytm-shorts-lockup-view-model),

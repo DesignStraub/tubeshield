@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.1 – 2026-11-19
+- Shorts ausblenden: Eintrag „Shorts“ verschwindet jetzt auch in der eingeklappten Seitenleiste.
+
 ## 1.3.0 – 2026-11-19
 - Neuer Schalter **Startseite ohne Vorschläge:** Die YouTube-Startseite zeigt keinen Feed mehr, nur noch Suche und Seitenleiste.
 - Neuer Schalter **Shorts ausblenden:** Shorts verschwinden von der Startseite, aus den Suchergebnissen (auch der Filter-Chip „Shorts“), aus der Seitenleiste, von Kanalseiten (Reiter „Shorts“) und aus den Abos. Direkte Shorts-Links öffnen als normales Video.
