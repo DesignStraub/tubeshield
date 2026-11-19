@@ -46,13 +46,29 @@ TubeShield **sammelt, speichert und sendet keine Daten**. Es gibt keinen Server,
 
 ## Installation
 
-### Voraussetzungen
+Zwei Wege: die **fertige App herunterladen** (schnell, aber mit einem Haken in Safari) oder **selbst bauen** (einmal Xcode einrichten, dann dauerhaft ohne Haken).
+
+### A) Fertige App herunterladen
+
+1. Unter [Releases](https://github.com/DesignStraub/tubeshield/releases/latest) die Datei `TubeShield-<Version>.zip` laden, entpacken und `TubeShield.app` in den Ordner **Programme** ziehen.
+2. Die App ist nicht von Apple beglaubigt (notarisiert). Beim ersten Öffnen deshalb: **Rechtsklick → Öffnen → Öffnen**. Falls macOS das trotzdem blockiert: Systemeinstellungen → Datenschutz & Sicherheit → **Dennoch öffnen**.
+3. In Safari die Entwickler-Funktionen einschalten: Safari → Einstellungen → Erweitert → **Funktionen für Webentwickler anzeigen**.
+4. Safari → Einstellungen → Entwickler → **Unsignierte Erweiterungen erlauben** aktivieren.
+5. Safari → Einstellungen → Erweiterungen → Haken bei **TubeShield**, Zugriff auf **youtube.com** auf „Immer erlauben“.
+
+> **Der Haken:** Safari setzt „Unsignierte Erweiterungen erlauben“ bei **jedem Neustart von Safari** zurück – dann Schritt 4 wiederholen. Wer das nicht will, baut TubeShield einmal selbst (Weg B); das ist mit einer kostenlosen Apple-ID dauerhaft.
+
+Läuft ab macOS 13 auf Apple-Chip und Intel.
+
+### B) Selbst bauen
+
+#### Voraussetzungen
 
 - Mac mit aktuellem macOS und Safari
 - **Xcode** (kostenlos im App Store)
 - Eine **Apple-ID** (kostenlos reicht) – nötig, damit Safari die Erweiterung dauerhaft behält
 
-### Einmalig einrichten
+#### Einmalig einrichten
 
 1. **Xcode installieren**, einmal öffnen und die Zusatzkomponenten installieren lassen. Dann im Terminal:
    ```bash
@@ -73,7 +89,7 @@ TubeShield **sammelt, speichert und sendet keine Daten**. Es gibt keinen Server,
    echo "DEINE_TEAM_ID" > .team
    ```
 
-### Bauen & installieren
+#### Bauen & installieren
 
 ```bash
 ./scripts/build.sh
@@ -81,7 +97,9 @@ TubeShield **sammelt, speichert und sendet keine Daten**. Es gibt keinen Server,
 
 Das Skript übernimmt die Dateien aus `extension/` ins Xcode-Projekt, baut und signiert die App, prüft Signatur und Inhalt und installiert sie nach `/Applications/TubeShield.app`.
 
-### In Safari aktivieren
+`./scripts/build.sh --release` baut stattdessen die Download-Version (ad-hoc signiert, Apple-Chip + Intel, ab macOS 13) als ZIP nach `dist/`.
+
+#### In Safari aktivieren
 
 1. Safari → Einstellungen → **Erweiterungen** → Haken bei **TubeShield**.
 2. Bei TubeShield den Zugriff auf **youtube.com** auf „Immer erlauben“ stellen.

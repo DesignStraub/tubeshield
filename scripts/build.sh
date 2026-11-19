@@ -3,6 +3,8 @@
 #
 #   ./scripts/build.sh                 # bauen + installieren
 #   ./scripts/build.sh --no-install    # nur bauen
+#   ./scripts/build.sh --release       # Download-Version: ad-hoc signiert,
+#                                      # nicht installiert, als ZIP in dist/
 #
 # Signierung: Deine Apple-Team-ID wird aus der Umgebungsvariable
 # TUBESHIELD_TEAM oder aus der (nicht eingecheckten) Datei .team gelesen.
@@ -17,7 +19,15 @@ RESOURCES="$PROJECT_DIR/TubeShield Extension/Resources"
 BUILD_DIR="$PROJECT_DIR/build"
 APP="$BUILD_DIR/Build/Products/Release/TubeShield.app"
 INSTALL=1
-[[ "${1:-}" == "--no-install" ]] && INSTALL=0
+RELEASE=0
+for arg in "$@"; do
+  case "$arg" in
+    --no-install) INSTALL=0 ;;
+    --release) INSTALL=0; RELEASE=1 ;;
+    *) echo "Unbekannte Option: $arg" >&2; exit 1 ;;
+  esac
+done
+VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$ROOT/extension/manifest.json")"
 
 if ! xcodebuild -version >/dev/null 2>&1; then
   echo "Xcode fehlt oder ist nicht aktiv. Installieren und dann:" >&2
@@ -26,7 +36,7 @@ if ! xcodebuild -version >/dev/null 2>&1; then
 fi
 
 TEAM="${TUBESHIELD_TEAM:-}"
-if [[ -z "$TEAM" && -f "$ROOT/.team" ]]; then
+if [[ $RELEASE -eq 0 && -z "$TEAM" && -f "$ROOT/.team" ]]; then
   TEAM="$(tr -d '[:space:]' < "$ROOT/.team")"
 fi
 
@@ -36,6 +46,12 @@ rsync -a --delete "$ROOT/extension/" "$RESOURCES/"
 
 echo "==> Bauen"
 SIGN_ARGS=()
+EXTRA_ARGS=()
+if [[ $RELEASE -eq 1 ]]; then
+  TEAM=""
+  # Download-Version: Apple-Chip und Intel, ab macOS 13
+  EXTRA_ARGS=(ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO MACOSX_DEPLOYMENT_TARGET=13.0)
+fi
 if [[ -n "$TEAM" ]]; then
   echo "    Signiere mit Team $TEAM"
   SIGN_ARGS=(DEVELOPMENT_TEAM="$TEAM" CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates)
@@ -45,7 +61,8 @@ else
 fi
 rm -rf "$BUILD_DIR"
 xcodebuild -project "$PROJECT_DIR/TubeShield.xcodeproj" -scheme TubeShield \
-  -configuration Release -derivedDataPath "$BUILD_DIR" "${SIGN_ARGS[@]}" build \
+  -configuration Release -derivedDataPath "$BUILD_DIR" "${SIGN_ARGS[@]}" \
+  ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"} MARKETING_VERSION="$VERSION" build \
   | grep -E "error:|BUILD (SUCCEEDED|FAILED)" || true
 [[ -d "$APP" ]] || { echo "Build fehlgeschlagen." >&2; exit 1; }
 
@@ -54,6 +71,15 @@ codesign --verify --deep --strict "$APP"
 diff -r "$ROOT/extension" "$APP/Contents/PlugIns/TubeShield Extension.appex/Contents/Resources" >/dev/null \
   || { echo "App enthält nicht die aktuellen Erweiterungsdateien." >&2; exit 1; }
 echo "    Signatur gültig, Dateien aktuell."
+
+if [[ $RELEASE -eq 1 ]]; then
+  echo "==> Download-Version packen"
+  mkdir -p "$ROOT/dist"
+  ZIP="$ROOT/dist/TubeShield-$VERSION.zip"
+  rm -f "$ZIP"
+  ditto -c -k --keepParent "$APP" "$ZIP"
+  echo "    $ZIP"
+fi
 
 if [[ $INSTALL -eq 1 ]]; then
   echo "==> Installieren nach /Applications"
