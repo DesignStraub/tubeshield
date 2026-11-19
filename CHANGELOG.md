@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.2 – 2026-11-19
+- The popup and the extension description are now available in **English and German**, following Safari's language (English for all other languages).
+
 ## 1.3.1 – 2026-11-19
 - Hide Shorts: the "Shorts" entry now also disappears from the collapsed sidebar.
 - First downloadable build on GitHub Releases (ad-hoc signed, Apple silicon + Intel, macOS 13 or later). New option `./scripts/build.sh --release`; the app version now comes from `manifest.json`.

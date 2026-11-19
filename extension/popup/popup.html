@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>TubeShield</title>
@@ -20,26 +20,26 @@
 <body>
   <header>
     <h1>TubeShield</h1>
-    <p>Adblocker &amp; YouTube ohne Auto-Pause</p>
+    <p data-i18n="popupTagline">Ad blocker &amp; YouTube without auto-pause</p>
   </header>
   <label>
-    <span>Werbung blockieren<small>Werbe-Netzwerke, Tracker &amp; YouTube-Werbung</small></span>
+    <span><span data-i18n="adblockLabel">Block ads</span><small data-i18n="adblockHint"></small></span>
     <input type="checkbox" id="adblock">
   </label>
   <label>
-    <span>Auto-Pause verhindern<small>„Weiterschauen?“-Dialog automatisch bestätigen</small></span>
+    <span><span data-i18n="noAutoPauseLabel">Prevent auto-pause</span><small data-i18n="noAutoPauseHint"></small></span>
     <input type="checkbox" id="noAutoPause">
   </label>
-  <h2>YouTube aufräumen</h2>
+  <h2 data-i18n="cleanupHeading">Clean up YouTube</h2>
   <label>
-    <span>Startseite ohne Vorschläge<small>Nur noch die Suche – kein Feed zum Hängenbleiben</small></span>
+    <span><span data-i18n="hideHomeFeedLabel">Home page without recommendations</span><small data-i18n="hideHomeFeedHint"></small></span>
     <input type="checkbox" id="hideHomeFeed">
   </label>
   <label>
-    <span>Shorts ausblenden<small>Startseite, Suche, Seitenleiste, Kanäle &amp; Abos</small></span>
+    <span><span data-i18n="hideShortsLabel">Hide Shorts</span><small data-i18n="hideShortsHint"></small></span>
     <input type="checkbox" id="hideShorts">
   </label>
-  <footer id="status">Änderungen gelten sofort.</footer>
+  <footer id="status" data-i18n="statusDefault">Changes apply immediately.</footer>
   <script src="popup.js"></script>
 </body>
 </html>

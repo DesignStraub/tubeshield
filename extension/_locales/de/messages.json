@@ -1,0 +1,56 @@
+{
+  "extName": {
+    "message": "TubeShield"
+  },
+  "extDescription": {
+    "message": "Blockiert Werbung und Tracker, überspringt YouTube-Werbung und verhindert YouTubes automatische Pause („Weiterschauen?“). Optional: Startseite ohne Vorschläge und keine Shorts."
+  },
+  "popupTagline": {
+    "message": "Adblocker & YouTube ohne Auto-Pause"
+  },
+  "adblockLabel": {
+    "message": "Werbung blockieren"
+  },
+  "adblockHint": {
+    "message": "Werbe-Netzwerke, Tracker & YouTube-Werbung"
+  },
+  "noAutoPauseLabel": {
+    "message": "Auto-Pause verhindern"
+  },
+  "noAutoPauseHint": {
+    "message": "„Weiterschauen?“-Dialog automatisch bestätigen"
+  },
+  "cleanupHeading": {
+    "message": "YouTube aufräumen"
+  },
+  "hideHomeFeedLabel": {
+    "message": "Startseite ohne Vorschläge"
+  },
+  "hideHomeFeedHint": {
+    "message": "Nur noch die Suche – kein Feed zum Hängenbleiben"
+  },
+  "hideShortsLabel": {
+    "message": "Shorts ausblenden"
+  },
+  "hideShortsHint": {
+    "message": "Startseite, Suche, Seitenleiste, Kanäle & Abos"
+  },
+  "statusDefault": {
+    "message": "Änderungen gelten sofort."
+  },
+  "statusActive": {
+    "message": "Aktiv auf diesem Tab."
+  },
+  "statusSavedActive": {
+    "message": "Gespeichert – auf diesem Tab schon aktiv."
+  },
+  "statusSaved": {
+    "message": "Gespeichert."
+  },
+  "statusYtHint": {
+    "message": "Die YouTube-Schalter wirken nur auf youtube.com. Läuft dort nichts: Safari → Einstellungen → Erweiterungen → TubeShield → youtube.com auf „Immer erlauben“."
+  },
+  "statusError": {
+    "message": "Fehler:"
+  }
+}

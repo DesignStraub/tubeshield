@@ -5,6 +5,16 @@
   const ext = globalThis.browser || globalThis.chrome;
   const status = document.getElementById('status');
 
+  // ---------- Sprache (Englisch/Deutsch aus _locales, je nach Safari-Sprache) ----------
+  function t(key) {
+    try { return (ext.i18n && ext.i18n.getMessage(key)) || key; } catch (_) { return key; }
+  }
+  try { document.documentElement.lang = ext.i18n.getUILanguage().split('-')[0]; } catch (_) {}
+  for (const el of document.querySelectorAll('[data-i18n]')) {
+    const text = t(el.dataset.i18n);
+    if (text !== el.dataset.i18n) el.textContent = text;
+  }
+
   function storageGet(defaults) {
     if (usePromises) return ext.storage.local.get(defaults);
     return new Promise((resolve) => ext.storage.local.get(defaults, resolve));
@@ -48,12 +58,11 @@
     }
   }
 
-  const YT_HINT = 'Die YouTube-Schalter wirken nur auf youtube.com. Läuft dort nichts: ' +
-    'Safari → Einstellungen → Erweiterungen → TubeShield → youtube.com auf „Immer erlauben“.';
+  const YT_HINT = t('statusYtHint');
 
   async function showTabStatus() {
     const reply = await sendToTab({ type: 'tubeshield-status' });
-    status.textContent = reply && reply.ok ? 'Aktiv auf diesem Tab.' : YT_HINT;
+    status.textContent = reply && reply.ok ? t('statusActive') : YT_HINT;
   }
 
   async function init() {
@@ -66,9 +75,9 @@
           await storageSet({ [key]: box.checked });
           if (key === 'adblock') await setRuleset(box.checked);
           const reply = await sendToTab({ type: 'tubeshield-apply', values: { [key]: box.checked } });
-          status.textContent = reply && reply.ok ? 'Gespeichert – auf diesem Tab schon aktiv.' : 'Gespeichert. ' + YT_HINT;
+          status.textContent = reply && reply.ok ? t('statusSavedActive') : t('statusSaved') + ' ' + YT_HINT;
         } catch (err) {
-          status.textContent = 'Fehler: ' + (err && err.message ? err.message : err);
+          status.textContent = t('statusError') + ' ' + (err && err.message ? err.message : err);
         }
       });
     }
@@ -76,6 +85,6 @@
   }
 
   init().catch((err) => {
-    status.textContent = 'Fehler: ' + (err && err.message ? err.message : err);
+    status.textContent = t('statusError') + ' ' + (err && err.message ? err.message : err);
   });
 })();

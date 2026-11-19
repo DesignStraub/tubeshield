@@ -31,7 +31,7 @@
 | **YouTube: auto-pause** | The "Video paused. Continue watching?" dialog (and "Are you still there?" on YouTube Music) is confirmed automatically and the video keeps playing. |
 | **YouTube: home page without recommendations** *(optional)* | The home page shows no feed – only search and the sidebar. You search for what you want instead of drifting through recommendations. |
 | **YouTube: hide Shorts** *(optional)* | Shorts disappear from the home page, search (including the filter chip), the sidebar, channel pages and subscriptions. Direct Shorts links open as a regular video. |
-| **Popup** | Four switches: *block ads*, *prevent auto-pause* (both on) as well as *home page without recommendations* and *hide Shorts* (both off by default). The bottom line shows whether TubeShield is active on the current tab. The popup is currently in German. |
+| **Popup** | Four switches: *block ads*, *prevent auto-pause* (both on) as well as *home page without recommendations* and *hide Shorts* (both off by default). The bottom line shows whether TubeShield is active on the current tab. The popup is available in English and German. |
 
 **Safety net for the auto-pause block:** TubeShield only steps in if the video was paused *without* a click or key press from you. Other confirmation dialogs (e.g. "Remove from playlist?") are never confirmed automatically.
 
@@ -103,7 +103,7 @@ The script copies the files from `extension/` into the Xcode project, builds and
 2. Set TubeShield's access to **youtube.com** to "Always Allow".
 3. Reload open pages.
 
-> After reinstalling, Safari may reset the access to youtube.com. The popup shows this ("Aktiv auf diesem Tab" or a hint).
+> After reinstalling, Safari may reset the access to youtube.com. The popup shows this ("Active on this tab" or a hint).
 
 The app does **not** need to be running and needs **no login item** – it just has to be in Applications. Safari loads the extension on its own.
 

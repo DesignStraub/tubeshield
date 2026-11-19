@@ -1,0 +1,56 @@
+{
+  "extName": {
+    "message": "TubeShield"
+  },
+  "extDescription": {
+    "message": "Blocks ads and trackers, skips YouTube ads and stops YouTube's automatic pause (\"Continue watching?\"). Optional: a home page without recommendations and no Shorts."
+  },
+  "popupTagline": {
+    "message": "Ad blocker & YouTube without auto-pause"
+  },
+  "adblockLabel": {
+    "message": "Block ads"
+  },
+  "adblockHint": {
+    "message": "Ad networks, trackers & YouTube ads"
+  },
+  "noAutoPauseLabel": {
+    "message": "Prevent auto-pause"
+  },
+  "noAutoPauseHint": {
+    "message": "Confirm \"Continue watching?\" automatically"
+  },
+  "cleanupHeading": {
+    "message": "Clean up YouTube"
+  },
+  "hideHomeFeedLabel": {
+    "message": "Home page without recommendations"
+  },
+  "hideHomeFeedHint": {
+    "message": "Search only – no feed to get stuck in"
+  },
+  "hideShortsLabel": {
+    "message": "Hide Shorts"
+  },
+  "hideShortsHint": {
+    "message": "Home, search, sidebar, channels & subscriptions"
+  },
+  "statusDefault": {
+    "message": "Changes apply immediately."
+  },
+  "statusActive": {
+    "message": "Active on this tab."
+  },
+  "statusSavedActive": {
+    "message": "Saved – already active on this tab."
+  },
+  "statusSaved": {
+    "message": "Saved."
+  },
+  "statusYtHint": {
+    "message": "The YouTube switches only work on youtube.com. If nothing happens there: Safari → Settings → Extensions → TubeShield → set youtube.com to \"Always Allow\"."
+  },
+  "statusError": {
+    "message": "Error:"
+  }
+}
