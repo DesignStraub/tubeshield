@@ -68,6 +68,7 @@
             { "path": "Resources/manifest.json", "target-membership": [ "TubeShield Extension/resources" ] },
             { "path": "Resources/rules", "target-membership": [ "TubeShield Extension/resources" ] },
             { "path": "Resources/_locales", "target-membership": [ "TubeShield Extension/resources" ] },
+            { "path": "Resources/background.js", "target-membership": [ "TubeShield Extension/resources" ] },
           ],
         },
         { "path": "SafariWebExtensionHandler.swift", "target-membership": [ "TubeShield Extension/compile-sources" ] },

@@ -52,5 +52,36 @@
   },
   "statusError": {
     "message": "Fehler:"
+  },
+  "autoUpdateLabel": {
+    "message": "Filterlisten automatisch aktualisieren"
+  },
+  "autoUpdateHint": {
+    "message": "Täglich von GitHub – es werden keine Daten gesendet"
+  },
+  "filtersUpdated": {
+    "message": "Listen vom $DATE$ · $COUNT$ neue Regeln",
+    "placeholders": {
+      "date": {
+        "content": "$1"
+      },
+      "count": {
+        "content": "$2"
+      }
+    }
+  },
+  "filtersChecking": {
+    "message": "Suche nach neuen Filterlisten …"
+  },
+  "filtersError": {
+    "message": "Aktualisierung fehlgeschlagen ($ERR$) – neuer Versuch später.",
+    "placeholders": {
+      "err": {
+        "content": "$1"
+      }
+    }
+  },
+  "filtersOff": {
+    "message": "Es gelten nur die eingebauten Listen."
   }
 }

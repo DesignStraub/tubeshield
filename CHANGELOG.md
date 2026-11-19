@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0 – 2026-11-19
+- **Filter lists update automatically.** Once a day TubeShield downloads the current list from GitHub and activates new rules right away – no reinstall needed. Rules that were removed from the lists are switched off where Safari supports it.
+- A GitHub Action (`.github/workflows/filters.yml`) builds that list every night from EasyList, EasyPrivacy and EasyList Germany.
+- New popup switch *Update filter lists automatically* (on by default) with the date of the current list.
+
 ## 1.3.2 – 2026-11-19
 - The popup and the extension description are now available in **English and German**, following Safari's language (English for all other languages).
 

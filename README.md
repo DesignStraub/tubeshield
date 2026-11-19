@@ -24,25 +24,25 @@
 
 | Area | What happens |
 |---|---|
-| **All websites** | About 93,000 network rules block ad and tracking servers before anything is loaded. |
+| **All websites** | About 93,000 network rules block ad and tracking servers before anything is loaded. The lists update themselves daily. |
 | **YouTube: video ads** | "Skip" is clicked automatically. Otherwise the ad is muted and skipped, or played through at 16× speed. The picture, controls and yellow ad bars stay invisible meanwhile. Sound and speed are restored afterwards. |
 | **YouTube: banners & feed** | Ad tiles on the home page, next to the video, in Shorts and in search are hidden. |
 | **YouTube: Premium upsells** | Premium upsell dialogs and banners are hidden and closed via their own "No thanks" button – never via the buy button. |
 | **YouTube: auto-pause** | The "Video paused. Continue watching?" dialog (and "Are you still there?" on YouTube Music) is confirmed automatically and the video keeps playing. |
 | **YouTube: home page without recommendations** *(optional)* | The home page shows no feed – only search and the sidebar. You search for what you want instead of drifting through recommendations. |
 | **YouTube: hide Shorts** *(optional)* | Shorts disappear from the home page, search (including the filter chip), the sidebar, channel pages and subscriptions. Direct Shorts links open as a regular video. |
-| **Popup** | Four switches: *block ads*, *prevent auto-pause* (both on) as well as *home page without recommendations* and *hide Shorts* (both off by default). The bottom line shows whether TubeShield is active on the current tab. The popup is available in English and German. |
+| **Popup** | Five switches: *block ads*, *update filter lists automatically*, *prevent auto-pause* (all on) as well as *home page without recommendations* and *hide Shorts* (both off by default). The bottom line shows whether TubeShield is active on the current tab. The popup is available in English and German. |
 
 **Safety net for the auto-pause block:** TubeShield only steps in if the video was paused *without* a click or key press from you. Other confirmation dialogs (e.g. "Remove from playlist?") are never confirmed automatically.
 
 ## Privacy
 
-TubeShield **collects, stores and sends no data**. There is no server, no telemetry, no account.
+TubeShield **collects and sends no data**. There is no TubeShield server, no telemetry, no account.
 
 - Safari itself does the blocking, based on fixed rules (`declarativeNetRequest`). The extension never sees which pages you visit.
 - The YouTube script only runs on `youtube.com` and only changes the page in your browser.
 - The only thing stored is the popup switches – locally in Safari.
-- The only network connection in the whole project: the helper script `tools/update-filters.py` downloads the public filter lists from easylist.to *during development*. The installed extension itself never connects anywhere.
+- **The only connection the extension makes:** once a day it downloads the public filter list `filters.json` from GitHub (`raw.githubusercontent.com/DesignStraub/tubeshield/filter-updates/`). It is a plain download – TubeShield sends nothing along. Like any download, GitHub sees your IP address. You can turn this off in the popup (*Update filter lists automatically*); TubeShield then only uses the lists built into the app.
 
 ## Installation
 
@@ -118,7 +118,9 @@ The app does **not** need to be running and needs **no login item** – it just 
 
 ## Updating the filter lists
 
-The rules in `extension/rules/filters.json` are generated from public filter lists. To update them (e.g. every few weeks):
+**Nothing to do – it happens automatically.** Every night the GitHub Action `.github/workflows/filters.yml` runs `tools/update-filters.py --update-file …` and publishes the result to the branch `filter-updates`. Installed copies download it once a day (`extension/background.js`), compare it with the rules built into the app and activate new rules as dynamic rules. Rules that were removed from the lists are switched off where Safari supports `updateStaticRules`.
+
+The lists built into the app (`extension/rules/filters.json`) are only the starting point. To refresh them for a new release:
 
 ```bash
 python3 tools/update-filters.py
@@ -132,6 +134,7 @@ Custom rules go into `tools/custom-rules.txt` (Adblock Plus syntax, e.g. `||ads.
 ```
 extension/
 ├── manifest.json          Safari Web Extension (Manifest V3)
+├── background.js          daily filter list update
 ├── rules/custom.json      custom rules (from tools/custom-rules.txt)
 ├── rules/filters.json     ~93,000 rules from EasyList & co.
 ├── content/youtube.js     YouTube: ads, auto-pause, Premium dialogs, Shorts links
@@ -159,6 +162,7 @@ tubeshield/
 ├── extension/        extension source code (develop here)
 ├── xcode/            Xcode project: the Mac app that contains the extension
 ├── tools/            filter list converter and custom rules
+├── .github/workflows/ nightly filter list update (filters.yml)
 ├── scripts/build.sh  build, sign, install
 ├── CHANGELOG.md
 └── LICENSE           GPL-3.0

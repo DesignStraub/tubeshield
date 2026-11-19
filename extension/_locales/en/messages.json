@@ -52,5 +52,36 @@
   },
   "statusError": {
     "message": "Error:"
+  },
+  "autoUpdateLabel": {
+    "message": "Update filter lists automatically"
+  },
+  "autoUpdateHint": {
+    "message": "Daily from GitHub – no data is sent"
+  },
+  "filtersUpdated": {
+    "message": "Lists from $DATE$ · $COUNT$ new rules",
+    "placeholders": {
+      "date": {
+        "content": "$1"
+      },
+      "count": {
+        "content": "$2"
+      }
+    }
+  },
+  "filtersChecking": {
+    "message": "Checking for new filter lists …"
+  },
+  "filtersError": {
+    "message": "Update failed ($ERR$) – will try again later.",
+    "placeholders": {
+      "err": {
+        "content": "$1"
+      }
+    }
+  },
+  "filtersOff": {
+    "message": "Only the built-in lists are used."
   }
 }
