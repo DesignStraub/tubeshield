@@ -1,0 +1,55 @@
+# Builds the filter list update that installed copies of TubeShield download
+# once a day. The result is force-pushed to the branch `filter-updates`
+# (a single commit, so the history stays small) and served from
+# https://raw.githubusercontent.com/DesignStraub/tubeshield/filter-updates/filters.json
+name: Update filter lists
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: filter-updates
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate update file
+        run: |
+          mkdir -p out
+          python3 tools/update-filters.py --update-file out/filters.json
+          # Sanity check: never publish a broken or suspiciously small list.
+          python3 - <<'PY'
+          import json
+          data = json.load(open("out/filters.json"))
+          n = len(data["rules"])
+          print("rules:", n)
+          assert data["format"] == 1 and n > 20000, "list too small - not publishing"
+          PY
+
+      - name: Publish to branch filter-updates
+        run: |
+          cd out
+          cat > README.md <<'MD'
+          Generated daily by `.github/workflows/filters.yml` from EasyList, EasyPrivacy
+          and EasyList Germany (© The EasyList authors, GPLv3 / CC BY-SA 3.0).
+          Installed copies of TubeShield download `filters.json` from here.
+          MD
+          git init -q -b filter-updates
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add filters.json README.md
+          git commit -q -m "Filter lists $(date -u +%Y-%m-%d)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" filter-updates

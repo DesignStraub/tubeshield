@@ -18,9 +18,15 @@ kaputte Seiten. Einfache Ausnahmen (@@||domain^) aus den Listen werden
 berücksichtigt – solche Domains werden nicht blockiert.
 
 Nutzung:  python3 tools/update-filters.py
+          python3 tools/update-filters.py --update-file PFAD
+              schreibt nur die kompakte Update-Datei, die die installierte
+              Erweiterung täglich lädt (erzeugt von der GitHub Action
+              .github/workflows/filters.yml), und lässt extension/ unverändert.
 Nur Python-Standardbibliothek, keine Abhängigkeiten.
 """
 
+import argparse
+import datetime
 import json
 import re
 import sys
@@ -114,7 +120,27 @@ def is_excepted(domain, exceptions):
     return any(".".join(parts[i:]) in exceptions for i in range(len(parts) - 1))
 
 
+def write_update_file(path, rules):
+    """Kompaktes Format für die Auto-Aktualisierung: [filter, drittanbieter, typen]."""
+    compact = []
+    for r in rules:
+        cond = r["condition"]
+        types = cond["resourceTypes"]
+        compact.append([cond["urlFilter"],
+                        1 if cond.get("domainType") == "thirdParty" else 0,
+                        "" if types == ALL_TYPES else ",".join(sorted(types))])
+    data = {"format": 1,
+            "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "rules": compact}
+    Path(path).write_text(json.dumps(data, separators=(",", ":")) + "\n", encoding="utf-8")
+    print(f"{len(compact):>6} Regeln -> {path}", file=sys.stderr)
+
+
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--update-file", help="nur die Update-Datei für die Auto-Aktualisierung schreiben")
+    args = ap.parse_args()
+
     custom_blocks, _ = parse(CUSTOM.read_text(encoding="utf-8"), allow_paths=True)
 
     list_blocks, exceptions, stats = [], set(), []
@@ -150,6 +176,10 @@ def main():
 
     custom_rules = build(custom_blocks, MAX_RULES)
     filter_rules = build(list_blocks, MAX_RULES - len(custom_rules))
+
+    if args.update_file:
+        write_update_file(args.update_file, filter_rules)
+        return
 
     for path, rules in ((OUTPUT_CUSTOM, custom_rules), (OUTPUT_FILTERS, filter_rules)):
         path.write_text(json.dumps(rules, separators=(",", ":")) + "\n", encoding="utf-8")
