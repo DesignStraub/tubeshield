@@ -1,27 +1,28 @@
 # Changelog
 
 ## 1.3.1 – 2026-11-19
-- Shorts ausblenden: Eintrag „Shorts“ verschwindet jetzt auch in der eingeklappten Seitenleiste.
+- Hide Shorts: the "Shorts" entry now also disappears from the collapsed sidebar.
+- First downloadable build on GitHub Releases (ad-hoc signed, Apple silicon + Intel, macOS 13 or later). New option `./scripts/build.sh --release`; the app version now comes from `manifest.json`.
 
 ## 1.3.0 – 2026-11-19
-- Neuer Schalter **Startseite ohne Vorschläge:** Die YouTube-Startseite zeigt keinen Feed mehr, nur noch Suche und Seitenleiste.
-- Neuer Schalter **Shorts ausblenden:** Shorts verschwinden von der Startseite, aus den Suchergebnissen (auch der Filter-Chip „Shorts“), aus der Seitenleiste, von Kanalseiten (Reiter „Shorts“) und aus den Abos. Direkte Shorts-Links öffnen als normales Video.
-- Beide Schalter sind anfangs aus und wirken sofort, ohne Neuladen.
-- Popup zeigt unten, ob TubeShield auf dem offenen Tab aktiv ist – und wenn nicht, wo man in Safari den Zugriff auf youtube.com erlaubt. Geänderte Schalter gehen direkt an den offenen Tab.
+- New switch **Home page without recommendations:** the YouTube home page no longer shows a feed, only search and the sidebar.
+- New switch **Hide Shorts:** Shorts disappear from the home page, search results (including the "Shorts" filter chip), the sidebar, channel pages ("Shorts" tab) and subscriptions. Direct Shorts links open as a regular video.
+- Both switches are off by default and take effect immediately, without reloading.
+- The popup shows at the bottom whether TubeShield is active on the current tab – and if not, where to allow access to youtube.com in Safari. Changed switches are sent straight to the open tab.
 
 ## 1.2.0 – 2026-11-18
-- **Alle Websites:** rund 93.000 Regeln aus EasyList, EasyPrivacy und EasyList Germany (vorher 47).
-- Regeln auf zwei Regelsätze verteilt (`custom` + `filters`), damit der Grundschutz auch dann aktiv bleibt, wenn Safari die große Liste ablehnt.
-- Neues Werkzeug `tools/update-filters.py` zum Aktualisieren der Listen.
-- Neues Build-Skript `scripts/build.sh` (abgleichen, bauen, signieren, prüfen, installieren).
+- **All websites:** about 93,000 rules from EasyList, EasyPrivacy and EasyList Germany (previously 47).
+- Rules split into two rule sets (`custom` + `filters`) so that the basic protection stays active even if Safari rejects the big list.
+- New tool `tools/update-filters.py` for updating the lists.
+- New build script `scripts/build.sh` (sync, build, sign, verify, install).
 
 ## 1.1.1 – 2026-11-18
-- YouTube: Gelbe Werbe-Fortschrittsleiste, Steuerleiste und Werbe-Markierungen in der Zeitleiste während der Werbung ausgeblendet – ohne Überblend-Animation.
+- YouTube: the yellow ad progress bar, the controls and the ad markers in the timeline are hidden during ads – without a fade animation.
 
 ## 1.1.0 – 2026-11-18
-- YouTube: Bei Werbung, die direkt in den Videostream eingebettet ist, wird nicht mehr ans Ende gesprungen (das hätte das eigentliche Video übersprungen). Stattdessen: stumm + 16-fache Geschwindigkeit.
-- YouTube: Werbebild ist sofort unsichtbar, nicht erst nach dem nächsten Prüfzyklus.
-- YouTube: Premium-Werbedialoge werden erkannt (korrekte Elementnamen `yt-upsell-dialog-renderer`, `yt-mealbar-promo-renderer`), ausgeblendet und über „Nein danke“ geschlossen.
+- YouTube: for ads embedded directly in the video stream, TubeShield no longer jumps to the end (that would have skipped the actual video). Instead: muted + 16× speed.
+- YouTube: the ad picture is invisible right away, not only after the next check cycle.
+- YouTube: Premium upsell dialogs are detected (correct element names `yt-upsell-dialog-renderer`, `yt-mealbar-promo-renderer`), hidden and closed via "No thanks".
 
 ## 1.0.0 – 2026-11-18
-- Erste Version: Netzwerk-Blockieren, YouTube-Werbung überspringen, Auto-Pause-Block, Popup mit Schaltern.
+- First version: network blocking, skipping YouTube ads, auto-pause block, popup with switches.

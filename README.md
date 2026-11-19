@@ -1,186 +1,184 @@
 # TubeShield
 
-**Ein schlanker, privater Adblocker für Safari auf dem Mac – mit YouTube-Werbeblocker und Schutz vor YouTubes automatischer Pause („Video pausiert. Weiterschauen?“).**
+**A lightweight, private ad blocker for Safari on Mac – with a YouTube ad blocker and protection against YouTube's automatic pause ("Video paused. Continue watching?").**
 
-> *English summary:* TubeShield is a small, open-source Safari Web Extension for macOS. It blocks ads and trackers on all websites (~93,000 network rules generated from EasyList, EasyPrivacy and EasyList Germany), skips/hides YouTube video ads, hides YouTube Premium upsell dialogs and automatically dismisses YouTube's "Video paused. Continue watching?" prompt. Optional switches hide the YouTube home feed and all Shorts. It collects no data at all. Build instructions below (German).
+**[⬇ Download the latest version](https://github.com/DesignStraub/tubeshield/releases/latest)** · macOS 13 or later · Apple silicon and Intel
 
 ---
 
-## Inhalt
+## Contents
 
-- [Funktionen](#funktionen)
-- [Datenschutz](#datenschutz)
+- [Features](#features)
+- [Privacy](#privacy)
 - [Installation](#installation)
-- [Testen, ob es wirkt](#testen-ob-es-wirkt)
-- [Filterlisten aktualisieren](#filterlisten-aktualisieren)
-- [Wie es funktioniert](#wie-es-funktioniert)
-- [Projektstruktur](#projektstruktur)
-- [Grenzen](#grenzen)
-- [Lizenz & Credits](#lizenz--credits)
+- [Check that it works](#check-that-it-works)
+- [Updating the filter lists](#updating-the-filter-lists)
+- [How it works](#how-it-works)
+- [Project structure](#project-structure)
+- [Limitations](#limitations)
+- [License & credits](#license--credits)
 
 ---
 
-## Funktionen
+## Features
 
-| Bereich | Was passiert |
+| Area | What happens |
 |---|---|
-| **Alle Websites** | Rund 93.000 Netzwerk-Regeln blockieren Werbe- und Tracking-Server, bevor überhaupt etwas geladen wird. |
-| **YouTube: Video-Werbung** | „Überspringen“ wird automatisch geklickt. Sonst wird der Spot stumm geschaltet und übersprungen bzw. mit 16-facher Geschwindigkeit durchgespielt. Bild, Steuerleiste und die gelben Werbe-Leisten sind währenddessen unsichtbar. Ton und Tempo werden danach wiederhergestellt. |
-| **YouTube: Banner & Feed** | Werbekacheln auf der Startseite, neben dem Video, in Shorts und in der Suche werden ausgeblendet. |
-| **YouTube: Premium-Werbung** | Premium-Werbedialoge und -leisten werden ausgeblendet und über ihren eigenen „Nein danke“-Knopf geschlossen – nie über den Kaufen-Knopf. |
-| **YouTube: Auto-Pause** | Der Dialog „Video pausiert. Weiterschauen?“ (und „Bist du noch da?“ bei YouTube Music) wird automatisch bestätigt und das Video läuft weiter. |
-| **YouTube: Startseite ohne Vorschläge** *(optional)* | Die Startseite zeigt keinen Feed mehr – nur Suche und Seitenleiste. Man sucht gezielt, statt sich durch Vorschläge treiben zu lassen. |
-| **YouTube: Shorts ausblenden** *(optional)* | Shorts verschwinden von der Startseite, aus der Suche (inkl. Filter-Chip), aus der Seitenleiste, von Kanalseiten und aus den Abos. Direkte Shorts-Links öffnen als normales Video. |
-| **Popup** | Vier Schalter: *Werbung blockieren*, *Auto-Pause verhindern* (beide an) sowie *Startseite ohne Vorschläge* und *Shorts ausblenden* (beide anfangs aus). Unten steht, ob TubeShield auf dem offenen Tab aktiv ist. |
+| **All websites** | About 93,000 network rules block ad and tracking servers before anything is loaded. |
+| **YouTube: video ads** | "Skip" is clicked automatically. Otherwise the ad is muted and skipped, or played through at 16× speed. The picture, controls and yellow ad bars stay invisible meanwhile. Sound and speed are restored afterwards. |
+| **YouTube: banners & feed** | Ad tiles on the home page, next to the video, in Shorts and in search are hidden. |
+| **YouTube: Premium upsells** | Premium upsell dialogs and banners are hidden and closed via their own "No thanks" button – never via the buy button. |
+| **YouTube: auto-pause** | The "Video paused. Continue watching?" dialog (and "Are you still there?" on YouTube Music) is confirmed automatically and the video keeps playing. |
+| **YouTube: home page without recommendations** *(optional)* | The home page shows no feed – only search and the sidebar. You search for what you want instead of drifting through recommendations. |
+| **YouTube: hide Shorts** *(optional)* | Shorts disappear from the home page, search (including the filter chip), the sidebar, channel pages and subscriptions. Direct Shorts links open as a regular video. |
+| **Popup** | Four switches: *block ads*, *prevent auto-pause* (both on) as well as *home page without recommendations* and *hide Shorts* (both off by default). The bottom line shows whether TubeShield is active on the current tab. The popup is currently in German. |
 
-**Sicherheitsnetz beim Auto-Pause-Block:** TubeShield greift nur ein, wenn das Video *ohne* deinen Klick oder Tastendruck angehalten wurde. Andere Bestätigungsdialoge (z. B. „Aus Playlist entfernen?“) werden nie automatisch bestätigt.
+**Safety net for the auto-pause block:** TubeShield only steps in if the video was paused *without* a click or key press from you. Other confirmation dialogs (e.g. "Remove from playlist?") are never confirmed automatically.
 
-## Datenschutz
+## Privacy
 
-TubeShield **sammelt, speichert und sendet keine Daten**. Es gibt keinen Server, keine Telemetrie, keine Konten.
+TubeShield **collects, stores and sends no data**. There is no server, no telemetry, no account.
 
-- Das Blockieren übernimmt Safari selbst anhand fester Regeln (`declarativeNetRequest`). Die Erweiterung sieht dabei nicht, welche Seiten du besuchst.
-- Das YouTube-Skript läuft ausschließlich auf `youtube.com` und verändert nur die Seite in deinem Browser.
-- Gespeichert werden nur die Schalter aus dem Popup – lokal in Safari.
-- Einzige Netzwerkverbindung des ganzen Projekts: Das Hilfsskript `tools/update-filters.py` lädt *beim Entwickeln* die öffentlichen Filterlisten von easylist.to. Die installierte Erweiterung selbst verbindet sich nirgendwohin.
+- Safari itself does the blocking, based on fixed rules (`declarativeNetRequest`). The extension never sees which pages you visit.
+- The YouTube script only runs on `youtube.com` and only changes the page in your browser.
+- The only thing stored is the popup switches – locally in Safari.
+- The only network connection in the whole project: the helper script `tools/update-filters.py` downloads the public filter lists from easylist.to *during development*. The installed extension itself never connects anywhere.
 
 ## Installation
 
-Zwei Wege: die **fertige App herunterladen** (schnell, aber mit einem Haken in Safari) oder **selbst bauen** (einmal Xcode einrichten, dann dauerhaft ohne Haken).
+Two options: **download the ready-made app** (quick, but with one catch in Safari) or **build it yourself** (set up Xcode once, then no catch).
 
-### A) Fertige App herunterladen
+### A) Download the app
 
-1. Unter [Releases](https://github.com/DesignStraub/tubeshield/releases/latest) die Datei `TubeShield-<Version>.zip` laden, entpacken und `TubeShield.app` in den Ordner **Programme** ziehen.
-2. Die App ist nicht von Apple beglaubigt (notarisiert). Beim ersten Öffnen deshalb: **Rechtsklick → Öffnen → Öffnen**. Falls macOS das trotzdem blockiert: Systemeinstellungen → Datenschutz & Sicherheit → **Dennoch öffnen**.
-3. In Safari die Entwickler-Funktionen einschalten: Safari → Einstellungen → Erweitert → **Funktionen für Webentwickler anzeigen**.
-4. Safari → Einstellungen → Entwickler → **Unsignierte Erweiterungen erlauben** aktivieren.
-5. Safari → Einstellungen → Erweiterungen → Haken bei **TubeShield**, Zugriff auf **youtube.com** auf „Immer erlauben“.
+1. Download `TubeShield-<version>.zip` from [Releases](https://github.com/DesignStraub/tubeshield/releases/latest), unzip it and move `TubeShield.app` to **Applications**.
+2. The app is not notarized by Apple, so on first launch: **right-click → Open → Open**. If macOS still blocks it: System Settings → Privacy & Security → **Open Anyway**.
+3. In Safari, turn on the developer features: Safari → Settings → Advanced → **Show features for web developers**.
+4. Safari → Settings → Developer → enable **Allow unsigned extensions**.
+5. Safari → Settings → Extensions → enable **TubeShield** and set access to **youtube.com** to "Always Allow".
 
-> **Der Haken:** Safari setzt „Unsignierte Erweiterungen erlauben“ bei **jedem Neustart von Safari** zurück – dann Schritt 4 wiederholen. Wer das nicht will, baut TubeShield einmal selbst (Weg B); das ist mit einer kostenlosen Apple-ID dauerhaft.
+> **The catch:** Safari turns "Allow unsigned extensions" off **every time Safari restarts** – then repeat step 4. Safari only trusts extensions without this switch if they come from the App Store or are signed with a paid Developer ID and notarized by Apple. If you don't want to repeat the step, build TubeShield yourself once (option B) – with a free Apple ID that works permanently on your own Mac.
 
-Läuft ab macOS 13 auf Apple-Chip und Intel.
+### B) Build it yourself
 
-### B) Selbst bauen
+#### Requirements
 
-#### Voraussetzungen
+- A Mac with a current macOS and Safari
+- **Xcode** (free on the App Store)
+- An **Apple ID** (a free one is enough) – needed so that Safari keeps the extension permanently
 
-- Mac mit aktuellem macOS und Safari
-- **Xcode** (kostenlos im App Store)
-- Eine **Apple-ID** (kostenlos reicht) – nötig, damit Safari die Erweiterung dauerhaft behält
+#### One-time setup
 
-#### Einmalig einrichten
-
-1. **Xcode installieren**, einmal öffnen und die Zusatzkomponenten installieren lassen. Dann im Terminal:
+1. **Install Xcode**, open it once and let it install the additional components. Then in Terminal:
    ```bash
    sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
    ```
-2. **Apple-ID in Xcode anmelden:** Xcode → Einstellungen → Accounts → **+** → Apple ID.
-3. **Repository klonen:**
+2. **Sign in to Xcode with your Apple ID:** Xcode → Settings → Accounts → **+** → Apple ID.
+3. **Clone the repository:**
    ```bash
    git clone https://github.com/DesignStraub/tubeshield.git
    cd tubeshield
    ```
-4. **Team-ID eintragen.** Die einfachste Variante: Projekt in Xcode öffnen (`xcode/TubeShield/TubeShield.xcodeproj`), bei beiden Targets unter *Signing & Capabilities* dein „Personal Team“ wählen, Xcode schließen und die ID ablesen mit
+4. **Set your team ID.** The easiest way: open the project in Xcode (`xcode/TubeShield/TubeShield.xcodeproj`), choose your "Personal Team" for both targets under *Signing & Capabilities*, close Xcode and read the ID with
    ```bash
    grep -m1 DEVELOPMENT_TEAM xcode/TubeShield/TubeShield.xcodeproj/project.xcproj
    ```
-   Die 10-stellige ID dann in eine Datei `.team` im Projektordner schreiben (sie wird nicht mit hochgeladen):
+   Then write the 10-character ID to a file `.team` in the project folder (it is not committed):
    ```bash
-   echo "DEINE_TEAM_ID" > .team
+   echo "YOUR_TEAM_ID" > .team
    ```
 
-#### Bauen & installieren
+#### Build & install
 
 ```bash
 ./scripts/build.sh
 ```
 
-Das Skript übernimmt die Dateien aus `extension/` ins Xcode-Projekt, baut und signiert die App, prüft Signatur und Inhalt und installiert sie nach `/Applications/TubeShield.app`.
+The script copies the files from `extension/` into the Xcode project, builds and signs the app, checks signature and contents and installs it to `/Applications/TubeShield.app`.
 
-`./scripts/build.sh --release` baut stattdessen die Download-Version (ad-hoc signiert, Apple-Chip + Intel, ab macOS 13) als ZIP nach `dist/`.
+`./scripts/build.sh --release` instead builds the download version (ad-hoc signed, Apple silicon + Intel, macOS 13 or later) as a ZIP in `dist/`.
 
-#### In Safari aktivieren
+#### Enable in Safari
 
-1. Safari → Einstellungen → **Erweiterungen** → Haken bei **TubeShield**.
-2. Bei TubeShield den Zugriff auf **youtube.com** auf „Immer erlauben“ stellen.
-3. Offene Seiten neu laden.
+1. Safari → Settings → **Extensions** → enable **TubeShield**.
+2. Set TubeShield's access to **youtube.com** to "Always Allow".
+3. Reload open pages.
 
-> Nach einer Neuinstallation kann Safari den Zugriff auf youtube.com zurücksetzen. Das Popup zeigt das an („Aktiv auf diesem Tab“ oder ein Hinweis).
+> After reinstalling, Safari may reset the access to youtube.com. The popup shows this ("Aktiv auf diesem Tab" or a hint).
 
-Die App muss **nicht** laufen und braucht **keinen Autostart** – sie muss nur in „Programme“ liegen. Safari lädt die Erweiterung selbst.
+The app does **not** need to be running and needs **no login item** – it just has to be in Applications. Safari loads the extension on its own.
 
-> **Ohne Apple-ID / Team** baut das Skript eine ad-hoc-signierte Version. Die funktioniert nur mit Safari → Einstellungen → Entwickler → „Unsignierte Erweiterungen erlauben“, und das schaltet Safari bei jedem Neustart wieder aus.
+> **Without an Apple ID / team** the script builds an ad-hoc signed version. It only works with Safari → Settings → Developer → "Allow unsigned extensions", which Safari turns off again on every restart.
 
-> **Laufzeit der Signatur:** Mit einem kostenlosen Konto ist das Entwicklerzertifikat ein Jahr gültig. Danach einfach `./scripts/build.sh` erneut ausführen.
+> **Certificate lifetime:** with a free account the development certificate is valid for one year. After that, simply run `./scripts/build.sh` again.
 
-## Testen, ob es wirkt
+## Check that it works
 
-- **Allgemeiner Adblock:** Eine öffentliche Adblock-Testseite öffnen, z. B. <https://d3ward.github.io/toolz/adblock>. Sie zeigt an, wie viele Werbe- und Tracking-Server blockiert werden.
-- **YouTube:** Ein Musikvideo öffnen – Werbung sollte nicht zu sehen sein, das Video startet nach höchstens einem kurzen schwarzen Moment.
+- **General ad blocking:** open a public ad block test page, e.g. <https://d3ward.github.io/toolz/adblock>. It shows how many ad and tracking servers are blocked.
+- **YouTube:** open a music video – no ads should be visible, and the video starts after at most a short black moment.
 
-## Filterlisten aktualisieren
+## Updating the filter lists
 
-Die Regeln in `extension/rules/filters.json` werden aus öffentlichen Filterlisten erzeugt. Zum Aktualisieren (z. B. alle paar Wochen):
+The rules in `extension/rules/filters.json` are generated from public filter lists. To update them (e.g. every few weeks):
 
 ```bash
 python3 tools/update-filters.py
 ./scripts/build.sh
 ```
 
-Eigene Regeln kommen in `tools/custom-rules.txt` (Adblock-Plus-Syntax, z. B. `||werbung.example^`).
+Custom rules go into `tools/custom-rules.txt` (Adblock Plus syntax, e.g. `||ads.example^`).
 
-## Wie es funktioniert
+## How it works
 
 ```
 extension/
 ├── manifest.json          Safari Web Extension (Manifest V3)
-├── rules/custom.json      eigene Regeln (aus tools/custom-rules.txt)
-├── rules/filters.json     ~93.000 Regeln aus EasyList & Co.
-├── content/youtube.js     YouTube: Werbung, Auto-Pause, Premium-Dialoge, Shorts-Links
-├── content/youtube.css    YouTube: ausgeblendete Werbe-Elemente, Startseiten-Feed, Shorts
-└── popup/                 Popup mit den Schaltern
+├── rules/custom.json      custom rules (from tools/custom-rules.txt)
+├── rules/filters.json     ~93,000 rules from EasyList & co.
+├── content/youtube.js     YouTube: ads, auto-pause, Premium dialogs, Shorts links
+├── content/youtube.css    YouTube: hidden ad elements, home feed, Shorts
+└── popup/                 popup with the switches
 ```
 
-**Netzwerk-Blockieren** – Safari wertet die Regeln selbst aus (`declarativeNetRequest`). Übernommen werden nur einfache, robuste Domain-Regeln (`||domain^`, optional mit `$third-party` oder Ressourcentypen). Komplexe Regeln, Pfad-Muster und `$domain=`-Regeln werden bewusst übersprungen, weil sie am ehesten Seiten kaputt machen. Hauptseiten werden nie blockiert, nur eingebettete Inhalte. Die Regeln sind auf zwei Regelsätze verteilt: Sollte Safari die große Liste einmal ablehnen, bleibt der Grundschutz aus `custom.json` aktiv.
+**Network blocking** – Safari evaluates the rules itself (`declarativeNetRequest`). Only simple, robust domain rules are used (`||domain^`, optionally with `$third-party` or resource types). Complex rules, path patterns and `$domain=` rules are deliberately skipped because they are the most likely to break pages. Top-level pages are never blocked, only embedded content. The rules are split into two rule sets: should Safari ever reject the big list, the basic protection from `custom.json` stays active.
 
-**YouTube-Werbung** – Das Skript prüft alle 250 ms, ob der Player die Klasse `ad-showing` trägt. Dann:
-1. Skip-Knöpfe klicken,
-2. stumm schalten und auf 16-fache Geschwindigkeit stellen,
-3. bei separat geladenen Spots (≤ 3 Minuten) ans Ende springen. Bei Werbung, die YouTube direkt in den Videostream einbettet, wird **nicht** gesprungen – sonst würde das eigentliche Video übersprungen.
+**YouTube ads** – Every 250 ms the script checks whether the player has the `ad-showing` class. Then it:
+1. clicks skip buttons,
+2. mutes and switches to 16× speed,
+3. jumps to the end of separately loaded ads (≤ 3 minutes). Ads that YouTube embeds directly into the video stream are **not** skipped this way – otherwise the actual video would be skipped.
 
-Per CSS sind Bild und Bedienelemente während der Werbung sofort unsichtbar, ohne Überblend-Animation.
+Via CSS, the picture and controls are invisible right away during ads, without a fade animation.
 
-**Auto-Pause** – Das Skript merkt sich, wann zuletzt eine *echte* Eingabe (Klick, Taste, Touch) kam. Wird das Video ohne Eingabe pausiert und erscheint dann YouTubes Bestätigungsdialog, klickt es „Ja“ und setzt die Wiedergabe fort.
+**Auto-pause** – The script remembers when the last *real* input (click, key, touch) happened. If the video is paused without input and YouTube's confirmation dialog appears, it clicks "Yes" and resumes playback.
 
-## Projektstruktur
+**Home page & Shorts** – Each switch sets an attribute on the `<html>` element (`data-tubeshield-nohome`, `data-tubeshield-noshorts`). The rules in `youtube.css` only apply when it is set – that's why the switches take effect immediately. Shorts are recognised by their elements (`ytm-shorts-lockup-view-model`, `ytd-reel-shelf-renderer`, …) and by links to `/shorts/`; regular videos are left alone.
+
+## Project structure
 
 ```
 tubeshield/
-├── extension/        Quellcode der Erweiterung (hier wird entwickelt)
-├── xcode/            Xcode-Projekt: Mac-App, die die Erweiterung enthält
-├── tools/            Filterlisten-Konverter und eigene Regeln
-├── scripts/build.sh  Bauen, signieren, installieren
+├── extension/        extension source code (develop here)
+├── xcode/            Xcode project: the Mac app that contains the extension
+├── tools/            filter list converter and custom rules
+├── scripts/build.sh  build, sign, install
 ├── CHANGELOG.md
 └── LICENSE           GPL-3.0
 ```
 
-Änderungen immer in `extension/` machen – `scripts/build.sh` kopiert sie ins Xcode-Projekt.
+Always make changes in `extension/` – `scripts/build.sh` copies them into the Xcode project.
 
-**Startseite & Shorts** – Jeder Schalter setzt ein Attribut am `<html>`-Element (`data-tubeshield-nohome`, `data-tubeshield-noshorts`). Die Regeln in `youtube.css` greifen nur, wenn es gesetzt ist – deshalb wirken die Schalter sofort. Shorts werden an ihren Elementen (`ytm-shorts-lockup-view-model`, `ytd-reel-shelf-renderer`, …) und an Links auf `/shorts/` erkannt; normale Videos bleiben unberührt.
+## Limitations
 
-## Grenzen
+- **YouTube changes its pages regularly.** If something stops working, usually only selectors in `content/youtube.js` / `content/youtube.css` need to be updated.
+- **Ads embedded in the stream** can't be removed, only muted and played through quickly.
+- **On other websites** ad servers are blocked, but empty ad spaces are not hidden (no generic element rules – on purpose, to avoid breaking pages).
+- **Safari on macOS** only (iOS would be possible with the Xcode project but isn't set up).
 
-- **YouTube ändert seine Seite regelmäßig.** Hört etwas auf zu funktionieren, sind meist nur Selektoren in `content/youtube.js` / `content/youtube.css` anzupassen.
-- **In den Stream eingebettete Werbung** lässt sich nicht entfernen, nur stumm und schnell durchspielen.
-- **Auf anderen Websites** werden Werbe-Server blockiert, leere Werbeflächen aber nicht ausgeblendet (keine allgemeinen Element-Regeln – bewusst, um Seiten nicht zu beschädigen).
-- Nur **Safari auf macOS** (iOS wäre mit dem Xcode-Projekt möglich, ist aber nicht eingerichtet).
+## License & credits
 
-## Lizenz & Credits
+TubeShield is licensed under the **GNU General Public License v3.0** – see [LICENSE](LICENSE).
 
-TubeShield steht unter der **GNU General Public License v3.0** – siehe [LICENSE](LICENSE).
+The rules in `extension/rules/filters.json` are generated from these lists:
 
-Die Regeln in `extension/rules/filters.json` werden aus diesen Listen erzeugt:
+- [EasyList](https://easylist.to/), [EasyPrivacy](https://easylist.to/) and [EasyList Germany](https://easylist.to/) – © The EasyList authors, licensed under GPLv3 and CC BY-SA 3.0 respectively.
 
-- [EasyList](https://easylist.to/), [EasyPrivacy](https://easylist.to/) und [EasyList Germany](https://easylist.to/) – © The EasyList authors, lizenziert unter GPLv3 bzw. CC BY-SA 3.0.
-
-Danke an alle, die diese Listen pflegen.
+Thanks to everyone who maintains these lists.
