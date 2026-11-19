@@ -2,7 +2,7 @@
 
 **Ein schlanker, privater Adblocker für Safari auf dem Mac – mit YouTube-Werbeblocker und Schutz vor YouTubes automatischer Pause („Video pausiert. Weiterschauen?“).**
 
-> *English summary:* TubeShield is a small, open-source Safari Web Extension for macOS. It blocks ads and trackers on all websites (~93,000 network rules generated from EasyList, EasyPrivacy and EasyList Germany), skips/hides YouTube video ads, hides YouTube Premium upsell dialogs and automatically dismisses YouTube's "Video paused. Continue watching?" prompt. It collects no data at all. Build instructions below (German).
+> *English summary:* TubeShield is a small, open-source Safari Web Extension for macOS. It blocks ads and trackers on all websites (~93,000 network rules generated from EasyList, EasyPrivacy and EasyList Germany), skips/hides YouTube video ads, hides YouTube Premium upsell dialogs and automatically dismisses YouTube's "Video paused. Continue watching?" prompt. Optional switches hide the YouTube home feed and all Shorts. It collects no data at all. Build instructions below (German).
 
 ---
 
@@ -29,7 +29,9 @@
 | **YouTube: Banner & Feed** | Werbekacheln auf der Startseite, neben dem Video, in Shorts und in der Suche werden ausgeblendet. |
 | **YouTube: Premium-Werbung** | Premium-Werbedialoge und -leisten werden ausgeblendet und über ihren eigenen „Nein danke“-Knopf geschlossen – nie über den Kaufen-Knopf. |
 | **YouTube: Auto-Pause** | Der Dialog „Video pausiert. Weiterschauen?“ (und „Bist du noch da?“ bei YouTube Music) wird automatisch bestätigt und das Video läuft weiter. |
-| **Popup** | Zwei Schalter: *Werbung blockieren* und *Auto-Pause verhindern*. |
+| **YouTube: Startseite ohne Vorschläge** *(optional)* | Die Startseite zeigt keinen Feed mehr – nur Suche und Seitenleiste. Man sucht gezielt, statt sich durch Vorschläge treiben zu lassen. |
+| **YouTube: Shorts ausblenden** *(optional)* | Shorts verschwinden von der Startseite, aus der Suche (inkl. Filter-Chip), aus der Seitenleiste, von Kanalseiten und aus den Abos. Direkte Shorts-Links öffnen als normales Video. |
+| **Popup** | Vier Schalter: *Werbung blockieren*, *Auto-Pause verhindern* (beide an) sowie *Startseite ohne Vorschläge* und *Shorts ausblenden* (beide anfangs aus). Unten steht, ob TubeShield auf dem offenen Tab aktiv ist. |
 
 **Sicherheitsnetz beim Auto-Pause-Block:** TubeShield greift nur ein, wenn das Video *ohne* deinen Klick oder Tastendruck angehalten wurde. Andere Bestätigungsdialoge (z. B. „Aus Playlist entfernen?“) werden nie automatisch bestätigt.
 
@@ -39,7 +41,7 @@ TubeShield **sammelt, speichert und sendet keine Daten**. Es gibt keinen Server,
 
 - Das Blockieren übernimmt Safari selbst anhand fester Regeln (`declarativeNetRequest`). Die Erweiterung sieht dabei nicht, welche Seiten du besuchst.
 - Das YouTube-Skript läuft ausschließlich auf `youtube.com` und verändert nur die Seite in deinem Browser.
-- Gespeichert werden nur die zwei Schalter aus dem Popup – lokal in Safari.
+- Gespeichert werden nur die Schalter aus dem Popup – lokal in Safari.
 - Einzige Netzwerkverbindung des ganzen Projekts: Das Hilfsskript `tools/update-filters.py` lädt *beim Entwickeln* die öffentlichen Filterlisten von easylist.to. Die installierte Erweiterung selbst verbindet sich nirgendwohin.
 
 ## Installation
@@ -85,6 +87,8 @@ Das Skript übernimmt die Dateien aus `extension/` ins Xcode-Projekt, baut und s
 2. Bei TubeShield den Zugriff auf **youtube.com** auf „Immer erlauben“ stellen.
 3. Offene Seiten neu laden.
 
+> Nach einer Neuinstallation kann Safari den Zugriff auf youtube.com zurücksetzen. Das Popup zeigt das an („Aktiv auf diesem Tab“ oder ein Hinweis).
+
 Die App muss **nicht** laufen und braucht **keinen Autostart** – sie muss nur in „Programme“ liegen. Safari lädt die Erweiterung selbst.
 
 > **Ohne Apple-ID / Team** baut das Skript eine ad-hoc-signierte Version. Die funktioniert nur mit Safari → Einstellungen → Entwickler → „Unsignierte Erweiterungen erlauben“, und das schaltet Safari bei jedem Neustart wieder aus.
@@ -114,9 +118,9 @@ extension/
 ├── manifest.json          Safari Web Extension (Manifest V3)
 ├── rules/custom.json      eigene Regeln (aus tools/custom-rules.txt)
 ├── rules/filters.json     ~93.000 Regeln aus EasyList & Co.
-├── content/youtube.js     YouTube: Werbung, Auto-Pause, Premium-Dialoge
-├── content/youtube.css    YouTube: ausgeblendete Werbe-Elemente
-└── popup/                 Popup mit den zwei Schaltern
+├── content/youtube.js     YouTube: Werbung, Auto-Pause, Premium-Dialoge, Shorts-Links
+├── content/youtube.css    YouTube: ausgeblendete Werbe-Elemente, Startseiten-Feed, Shorts
+└── popup/                 Popup mit den Schaltern
 ```
 
 **Netzwerk-Blockieren** – Safari wertet die Regeln selbst aus (`declarativeNetRequest`). Übernommen werden nur einfache, robuste Domain-Regeln (`||domain^`, optional mit `$third-party` oder Ressourcentypen). Komplexe Regeln, Pfad-Muster und `$domain=`-Regeln werden bewusst übersprungen, weil sie am ehesten Seiten kaputt machen. Hauptseiten werden nie blockiert, nur eingebettete Inhalte. Die Regeln sind auf zwei Regelsätze verteilt: Sollte Safari die große Liste einmal ablehnen, bleibt der Grundschutz aus `custom.json` aktiv.
@@ -143,6 +147,8 @@ tubeshield/
 ```
 
 Änderungen immer in `extension/` machen – `scripts/build.sh` kopiert sie ins Xcode-Projekt.
+
+**Startseite & Shorts** – Jeder Schalter setzt ein Attribut am `<html>`-Element (`data-tubeshield-nohome`, `data-tubeshield-noshorts`). Die Regeln in `youtube.css` greifen nur, wenn es gesetzt ist – deshalb wirken die Schalter sofort. Shorts werden an ihren Elementen (`ytm-shorts-lockup-view-model`, `ytd-reel-shelf-renderer`, …) und an Links auf `/shorts/` erkannt; normale Videos bleiben unberührt.
 
 ## Grenzen
 

@@ -13,6 +13,7 @@
     label { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); cursor: pointer; }
     label small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
     input { width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+    h2 { margin: 0; padding: 12px 16px 4px; color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
     footer { padding: 10px 16px 12px; color: var(--muted); font-size: 11px; }
   </style>
 </head>
@@ -28,6 +29,15 @@
   <label>
     <span>Auto-Pause verhindern<small>„Weiterschauen?“-Dialog automatisch bestätigen</small></span>
     <input type="checkbox" id="noAutoPause">
+  </label>
+  <h2>YouTube aufräumen</h2>
+  <label>
+    <span>Startseite ohne Vorschläge<small>Nur noch die Suche – kein Feed zum Hängenbleiben</small></span>
+    <input type="checkbox" id="hideHomeFeed">
+  </label>
+  <label>
+    <span>Shorts ausblenden<small>Startseite, Suche, Seitenleiste, Kanäle &amp; Abos</small></span>
+    <input type="checkbox" id="hideShorts">
   </label>
   <footer id="status">Änderungen gelten sofort.</footer>
   <script src="popup.js"></script>

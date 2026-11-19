@@ -5,6 +5,9 @@
  *  3. Auto-Pause ("Video pausiert. Weiterschauen?"): Dialog automatisch
  *     bestätigen und Video weiterlaufen lassen – aber NUR, wenn die Pause
  *     nicht vom Nutzer selbst kam.
+ *  4. Optional: Startseiten-Vorschläge ausblenden (nur noch Suche).
+ *  5. Optional: Shorts überall ausblenden (Startseite, Suche, Seitenleiste,
+ *     Kanäle, Abos); direkte Shorts-Links öffnen als normales Video.
  */
 (() => {
   'use strict';
@@ -12,7 +15,13 @@
   if (window.__tubeShieldLoaded) return;
   window.__tubeShieldLoaded = true;
 
-  const DEFAULTS = { adblock: true, noAutoPause: true };
+  const DEFAULTS = { adblock: true, noAutoPause: true, hideHomeFeed: false, hideShorts: false };
+  // Einstellung -> Attribut am <html>, an dem die CSS-Regeln hängen.
+  const ROOT_FLAGS = {
+    adblock: 'data-tubeshield-ads',
+    hideHomeFeed: 'data-tubeshield-nohome',
+    hideShorts: 'data-tubeshield-noshorts'
+  };
   const settings = { ...DEFAULTS };
 
   // ---------- Einstellungen (Safari: `browser`, Fallback: `chrome`) ----------
@@ -20,14 +29,18 @@
 
   function applySettings(values) {
     if (values && typeof values === 'object') {
-      if (typeof values.adblock === 'boolean') settings.adblock = values.adblock;
-      if (typeof values.noAutoPause === 'boolean') settings.noAutoPause = values.noAutoPause;
+      for (const key of Object.keys(DEFAULTS)) {
+        if (typeof values[key] === 'boolean') settings[key] = values[key];
+      }
     }
     const root = document.documentElement;
     if (root) {
-      if (settings.adblock) root.setAttribute('data-tubeshield-ads', '');
-      else root.removeAttribute('data-tubeshield-ads');
+      for (const [key, attr] of Object.entries(ROOT_FLAGS)) {
+        if (settings[key]) root.setAttribute(attr, '');
+        else root.removeAttribute(attr);
+      }
     }
+    redirectShorts();
   }
 
   function loadSettings() {
@@ -53,6 +66,20 @@
 
   applySettings(null);
   loadSettings();
+
+  // Das Popup fragt hier nach, ob TubeShield auf dem Tab läuft, und schickt
+  // geänderte Schalter direkt mit (wirkt sofort, auch ohne storage.onChanged).
+  try {
+    ext.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+      if (!msg || typeof msg !== 'object') return;
+      if (msg.type === 'tubeshield-apply') applySettings(msg.values);
+      if (msg.type === 'tubeshield-apply' || msg.type === 'tubeshield-status') {
+        sendResponse({ ok: true, settings: { ...settings } });
+      }
+    });
+  } catch (_) {
+    /* ohne Messaging bleibt nur storage.onChanged */
+  }
 
   // ---------- Helfer ----------
   function getPlayer() {
@@ -225,10 +252,29 @@
     }
   }
 
+  // ---------- 4./5. Shorts ----------
+  // Ausblenden passiert per CSS (youtube.css). Hier nur, was CSS nicht kann:
+  //  - direkte Shorts-Links (/shorts/<id>) als normales Video öffnen,
+  //  - den Filter-Chip "Shorts" in Suche/Startseite markieren (nur am Text erkennbar).
+  function redirectShorts() {
+    if (!settings.hideShorts) return;
+    const m = location.pathname.match(/^\/shorts\/([\w-]{6,})/);
+    if (m) location.replace('/watch?v=' + m[1]);
+  }
+
+  function markShortsChips() {
+    if (!settings.hideShorts) return;
+    for (const chip of document.querySelectorAll('yt-chip-cloud-chip-renderer:not([data-tubeshield-shorts])')) {
+      if (chip.textContent.trim() === 'Shorts') chip.setAttribute('data-tubeshield-shorts', '');
+    }
+  }
+
   // ---------- Loop ----------
   setInterval(() => {
     try { handleVideoAds(); } catch (_) {}
     try { handleAutoPause(); } catch (_) {}
     try { handlePromos(); } catch (_) {}
+    try { redirectShorts(); } catch (_) {}
+    try { markShortsChips(); } catch (_) {}
   }, 250);
 })();

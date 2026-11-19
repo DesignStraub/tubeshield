@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 – 2026-11-19
+- Neuer Schalter **Startseite ohne Vorschläge:** Die YouTube-Startseite zeigt keinen Feed mehr, nur noch Suche und Seitenleiste.
+- Neuer Schalter **Shorts ausblenden:** Shorts verschwinden von der Startseite, aus den Suchergebnissen (auch der Filter-Chip „Shorts“), aus der Seitenleiste, von Kanalseiten (Reiter „Shorts“) und aus den Abos. Direkte Shorts-Links öffnen als normales Video.
+- Beide Schalter sind anfangs aus und wirken sofort, ohne Neuladen.
+- Popup zeigt unten, ob TubeShield auf dem offenen Tab aktiv ist – und wenn nicht, wo man in Safari den Zugriff auf youtube.com erlaubt. Geänderte Schalter gehen direkt an den offenen Tab.
+
 ## 1.2.0 – 2026-11-18
 - **Alle Websites:** rund 93.000 Regeln aus EasyList, EasyPrivacy und EasyList Germany (vorher 47).
 - Regeln auf zwei Regelsätze verteilt (`custom` + `filters`), damit der Grundschutz auch dann aktiv bleibt, wenn Safari die große Liste ablehnt.
