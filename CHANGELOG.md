@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.5.0 – 2026-11-21
+- **YouTube ads are removed before they load.** A new page script (`content/page.js`) strips the ad fields (`adPlacements`, `playerAds`, `adSlots`) from YouTube's player data, so the player never schedules the ad – no black wait, nothing to skip. Muting and skipping remain as a fallback for ads stitched into the video stream.
+
 ## 1.4.2 – 2026-11-21
 - YouTube: ads that play in their own video element are now muted, sped up and skipped too. Before, only the main video was handled, so such an ad kept playing at normal speed with sound behind the hidden picture (about 10 seconds of black).
 

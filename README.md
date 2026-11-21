@@ -137,14 +137,15 @@ extension/
 ├── background.js          daily filter list update
 ├── rules/custom.json      custom rules (from tools/custom-rules.txt)
 ├── rules/filters.json     ~93,000 rules from EasyList & co.
-├── content/youtube.js     YouTube: ads, auto-pause, Premium dialogs, Shorts links
+├── content/page.js        YouTube: removes ad data from the player response
+├── content/youtube.js     YouTube: ad fallback, auto-pause, Premium dialogs, Shorts links
 ├── content/youtube.css    YouTube: hidden ad elements, home feed, Shorts
 └── popup/                 popup with the switches
 ```
 
 **Network blocking** – Safari evaluates the rules itself (`declarativeNetRequest`). Only simple, robust domain rules are used (`||domain^`, optionally with `$third-party` or resource types). Complex rules, path patterns and `$domain=` rules are deliberately skipped because they are the most likely to break pages. Top-level pages are never blocked, only embedded content. The rules are split into two rule sets: should Safari ever reject the big list, the basic protection from `custom.json` stays active.
 
-**YouTube ads** – Every 250 ms the script checks whether the player has the `ad-showing` class. Then it:
+**YouTube ads** – First, `content/page.js` runs in the page itself and removes the ad fields (`adPlacements`, `playerAds`, `adSlots`) from YouTube's player data before the player reads them, so most ads are never loaded. As a fallback, every 250 ms the script checks whether the player has the `ad-showing` class. Then it:
 1. clicks skip buttons,
 2. mutes and switches to 16× speed,
 3. jumps to the end of separately loaded ads (≤ 3 minutes). Ads that YouTube embeds directly into the video stream are **not** skipped this way – otherwise the actual video would be skipped.

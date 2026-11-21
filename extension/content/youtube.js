@@ -39,6 +39,9 @@
         if (settings[key]) root.setAttribute(attr, '');
         else root.removeAttribute(attr);
       }
+      // Für page.js: Werbedaten nur entfernen, solange Ad-Blocking an ist.
+      if (settings.adblock) root.removeAttribute('data-tubeshield-ads-off');
+      else root.setAttribute('data-tubeshield-ads-off', '');
     }
     redirectShorts();
   }
