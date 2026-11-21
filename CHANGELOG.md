@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.2 – 2026-11-21
+- YouTube: ads that play in their own video element are now muted, sped up and skipped too. Before, only the main video was handled, so such an ad kept playing at normal speed with sound behind the hidden picture (about 10 seconds of black).
+
 ## 1.4.1 – 2026-11-21
 - YouTube: while an ad is hidden, the player shows "Skipping ad …" with the time left and the current playback speed instead of a plain black picture.
 - `scripts/build.sh` now removes the app copy in the build folder after building, so Safari never sees two TubeShield extensions.
