@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1 – 2026-11-21
+- YouTube: while an ad is hidden, the player shows "Skipping ad …" with the time left and the current playback speed instead of a plain black picture.
+- `scripts/build.sh` now removes the app copy in the build folder after building, so Safari never sees two TubeShield extensions.
+
 ## 1.4.0 – 2026-11-19
 - **Filter lists update automatically.** Once a day TubeShield downloads the current list from GitHub and activates new rules right away – no reinstall needed. Rules that were removed from the lists are switched off where Safari supports it.
 - A GitHub Action (`.github/workflows/filters.yml`) builds that list every night from EasyList, EasyPrivacy and EasyList Germany.

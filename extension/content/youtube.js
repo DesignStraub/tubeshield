@@ -112,7 +112,43 @@
   ].join(',');
 
   const MAX_AD_SEEK_DURATION = 180; // Sekunden
-  let adState = null; // { muted, rate } solange wir eine Werbung manipulieren
+  let adState = null; // { muted, rate, start, maxRate, seeked } solange wir eine Werbung manipulieren
+
+  function msg(key, subs) {
+    try { return (ext && ext.i18n && ext.i18n.getMessage(key, subs)) || ''; } catch (_) { return ''; }
+  }
+
+  // Hinweis statt schwarzem Bild, solange eine Werbung läuft. Die zweite
+  // Zeile zeigt Restzeit und tatsächliche Geschwindigkeit – so sieht man,
+  // ob YouTube das Vorspulen gerade zulässt.
+  function adOverlay(player) {
+    let el = player.querySelector(':scope > .tubeshield-ad-overlay');
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'tubeshield-ad-overlay';
+      const title = document.createElement('div');
+      title.className = 'tubeshield-ad-title';
+      title.textContent = msg('adOverlayTitle') || 'Skipping ad …';
+      const detail = document.createElement('div');
+      detail.className = 'tubeshield-ad-detail';
+      el.append(title, detail);
+      player.appendChild(el);
+    }
+    return el;
+  }
+
+  function updateOverlay(player, video) {
+    const detail = adOverlay(player).querySelector('.tubeshield-ad-detail');
+    const rate = video.playbackRate || 1;
+    const d = video.duration;
+    let text = '';
+    if (Number.isFinite(d) && d > 0 && d <= MAX_AD_SEEK_DURATION) {
+      const left = Math.max(0, Math.ceil((d - video.currentTime) / rate));
+      text = msg('adOverlayRemaining', [String(left)]) || left + ' s';
+    }
+    const speed = Math.round(rate) + '×';
+    detail.textContent = text ? text + ' · ' + speed : speed;
+  }
 
   function handleVideoAds() {
     const player = getPlayer();
@@ -126,20 +162,30 @@
         try { btn.click(); } catch (_) {}
       }
       if (video) {
-        if (!adState) adState = { muted: video.muted, rate: video.playbackRate || 1 };
+        if (!adState) {
+          adState = { muted: video.muted, rate: video.playbackRate || 1, start: Date.now(), maxRate: 1, seeked: false };
+          console.info('[TubeShield] Werbung erkannt', { duration: video.duration, time: video.currentTime });
+        }
         video.muted = true;
         try { video.playbackRate = 16; } catch (_) {}
+        adState.maxRate = Math.max(adState.maxRate, video.playbackRate || 1);
         // Nur bei separat geladenen Spots (kurze Dauer) ans Ende springen.
         // Ist die Werbung direkt ins Video eingebettet, entspricht die Dauer
         // dem ganzen Video – dann würde ein Sprung das Video selbst
         // überspringen. In dem Fall läuft die Werbung nur stumm mit 16x durch.
         const d = video.duration;
         if (Number.isFinite(d) && d > 0 && d <= MAX_AD_SEEK_DURATION && video.currentTime < d - 0.3) {
-          try { video.currentTime = d - 0.1; } catch (_) {}
+          try { video.currentTime = d - 0.1; adState.seeked = true; } catch (_) {}
         }
         if (video.paused) video.play().catch(() => {});
+        updateOverlay(player, video);
       }
     } else if (adState) {
+      console.info('[TubeShield] Werbung vorbei', {
+        seconds: Math.round((Date.now() - adState.start) / 100) / 10,
+        maxRate: adState.maxRate,
+        seeked: adState.seeked
+      });
       // Werbung vorbei -> Ton & Geschwindigkeit wiederherstellen
       if (video) {
         video.muted = adState.muted;

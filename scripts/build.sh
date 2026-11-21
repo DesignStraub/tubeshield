@@ -90,3 +90,10 @@ if [[ $INSTALL -eq 1 ]]; then
   open /Applications/TubeShield.app
   echo "    Fertig. In Safari einmal die Seite neu laden."
 fi
+
+# Die Kopie im Build-Ordner abmelden und löschen. Sonst sieht Safari zwei
+# TubeShield-Erweiterungen mit derselben ID und lädt womöglich die falsche.
+LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+pluginkit -r "$APP/Contents/PlugIns/TubeShield Extension.appex" 2>/dev/null || true
+"$LSREGISTER" -u "$APP" 2>/dev/null || true
+rm -rf "$BUILD_DIR/Build/Products"

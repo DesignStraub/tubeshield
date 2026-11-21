@@ -46,6 +46,30 @@ html[data-tubeshield-ads] #movie_player.ad-showing .ytp-gradient-top {
   transition: none !important;
 }
 
+/* Hinweis statt schwarzem Bild (Element setzt youtube.js in den Player). */
+.tubeshield-ad-overlay {
+  display: none;
+}
+html[data-tubeshield-ads] #movie_player:is(.ad-showing, .ad-interrupting) > .tubeshield-ad-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #000;
+  color: #fff;
+  font: 500 16px/1.3 "YouTube Sans", Roboto, -apple-system, sans-serif;
+  pointer-events: none;
+}
+.tubeshield-ad-overlay .tubeshield-ad-detail {
+  font-size: 13px;
+  opacity: 0.6;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Gelbe Werbe-Leisten: dünner Werbe-Fortschrittsbalken und die gelben
    Markierungen für Werbepausen in der normalen Zeitleiste. */
 html[data-tubeshield-ads] .ytp-ad-persistent-progress-bar-container,

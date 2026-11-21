@@ -83,5 +83,17 @@
   },
   "filtersOff": {
     "message": "Es gelten nur die eingebauten Listen."
+  },
+  "adOverlayTitle": {
+    "message": "Werbung wird übersprungen …",
+    "description": "Shown in the YouTube player instead of an ad"
+  },
+  "adOverlayRemaining": {
+    "message": "noch $S$ s",
+    "placeholders": {
+      "s": {
+        "content": "$1"
+      }
+    }
   }
 }
