@@ -87,7 +87,11 @@ if [[ $INSTALL -eq 1 ]]; then
   sleep 1
   rm -rf /Applications/TubeShield.app
   cp -R "$APP" /Applications/
-  open /Applications/TubeShield.app
+  # Einmal kurz unsichtbar starten, damit Safari die Erweiterung neu einliest,
+  # danach wieder beenden – es bleibt kein Fenster offen.
+  open -g -j /Applications/TubeShield.app
+  sleep 3
+  osascript -e 'quit app "TubeShield"' 2>/dev/null || pkill -x TubeShield 2>/dev/null || true
   echo "    Fertig. In Safari einmal die Seite neu laden."
 fi
 
