@@ -41,9 +41,15 @@
     return resourceTypes.slice().sort().join(',');
   }
 
+  // Same list as YOUTUBE_EXEMPT in tools/update-filters.py: requests that
+  // YouTube's own player sends to Google ad hosts are not blocked (it stalls
+  // playback when they fail); everywhere else the rule applies.
+  const YOUTUBE_EXEMPT = /youtube|doubleclick|googlesyndication|googleadservices|googleapis|gstatic|google\.com|2mdn|ytimg|googlevideo|googletagservices|google-analytics/;
+
   function toRule(id, [filter, thirdParty, types]) {
     const condition = { urlFilter: filter, resourceTypes: types ? types.split(',') : ALL_TYPES };
     if (thirdParty) condition.domainType = 'thirdParty';
+    if (YOUTUBE_EXEMPT.test(filter)) condition.excludedInitiatorDomains = ['youtube.com'];
     return { id, priority: 1, action: { type: 'block' }, condition };
   }
 

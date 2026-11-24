@@ -47,6 +47,19 @@ LISTS = [
 # Safari erlaubt 150.000 Regeln pro Erweiterung; wir bleiben deutlich darunter.
 MAX_RULES = 100_000
 
+# Rules for Google / YouTube ad and measurement hosts (doubleclick.net,
+# googlesyndication.com, imasdk.googleapis.com, ...) get
+# excludedInitiatorDomains: ["youtube.com"]. YouTube's own player talks to these
+# hosts and notices when the requests fail: in Safari videos then sat for ~30 s
+# before they started. TubeShield removes the ad data from the player response
+# itself (content/page.js), so nothing useful is lost. On every other site the
+# rules apply as before.
+# Keep this list SMALL: giving all ~93,000 rules an exclusion makes WebKit's
+# content-rule compiler crash Safari (NFAToDFA::convert).
+YOUTUBE_EXEMPT = re.compile(
+    r"youtube|doubleclick|googlesyndication|googleadservices|googleapis|gstatic|"
+    r"google\.com|2mdn|ytimg|googlevideo|googletagservices|google-analytics")
+
 # Hauptseiten (main_frame) werden nie blockiert – nur eingebettete Inhalte.
 ALL_TYPES = ["sub_frame", "stylesheet", "script", "image", "font",
              "xmlhttprequest", "ping", "media", "websocket", "other"]
@@ -167,6 +180,8 @@ def main():
             cond = {"urlFilter": filt, "resourceTypes": list(types) if types else ALL_TYPES}
             if third_party:
                 cond["domainType"] = "thirdParty"
+            if YOUTUBE_EXEMPT.search(filt):
+                cond["excludedInitiatorDomains"] = ["youtube.com"]
             rules.append({"id": len(rules) + 1, "priority": 1,
                           "action": {"type": "block"}, "condition": cond})
             if len(rules) >= limit:
