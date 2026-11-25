@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Fix: YouTube videos could sit for ~30 seconds before starting. The network rules for Google ad hosts (`doubleclick.net`, `googlesyndication.com`, `imasdk.googleapis.com`, …) now skip requests that come from youtube.com itself, because YouTube's player waits when those fail. Ad data is still removed by `content/page.js`; on all other sites the rules work as before.
+
 ## 1.5.0 – 2026-11-21
 - **YouTube ads are removed before they load.** A new page script (`content/page.js`) strips the ad fields (`adPlacements`, `playerAds`, `adSlots`) from YouTube's player data, so the player never schedules the ad – no black wait, nothing to skip. Muting and skipping remain as a fallback for ads stitched into the video stream.
 
